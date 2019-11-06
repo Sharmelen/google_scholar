@@ -1,22 +1,35 @@
-import os
-import time
+import pymysql
+import scholarly
+
+#connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
+
+#try:
+    #with connection.cursor() as cursor:
+
+        #sqlQuery = "SELECT title, year FROM papers"
+        #cursor.execute(sqlQuery)
+        #auth = cursor.fetchall()
+        #print(auth)
+#except:
+    #print('not connected')
+
+word = input('Enter Your Keyword')
+
+search_query = scholarly.search_pubs_query(word)
+papers = next(search_query)
 
 
-print('Please Select One of These: \n 1.Search Paper By Author \n 2.Search Paper By Keyword')
+for x in range (1):
 
+    title = (papers.bib['title'])
+    abstract = (papers.bib['abstract'])
+    author = (papers.bib['author'])
+    url = (papers.bib['url'])
 
-number = input('Please pick your number \n')
+    cite = (papers.citedby)
 
-if(number == 1):
-	selection = 'author'
-	keyword = input('Please Enter The Name Of The Author \n')
-else:
-	selection = 'phrase'
-	keyword = input('Please Enter Your Keyword \n')
-
-os.system("gnome-terminal -e 'bash -c \"python3 scholar.py -c 2 --{} {} > result; exec bash\"'".format(selection, keyword))
-
-time.sleep(3)
-
-results = open('result','r')
-list_r = results.read()
+    # print(title)
+    # print(abstract)
+    # print(author)
+    # print(url)
+    print(cite)
