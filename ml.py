@@ -23,18 +23,39 @@ try:
             abstract = (papers.bib['abstract'])
             author = (papers.bib['author'])
             url = (papers.bib['url'])
-            #citedby = (papers.bib['citedby'])
+            citedby = papers.citedby
 
             print(title)
-            print(abstract)
+            print(type(abstract))
             print(author)
             print(url)
             #print(citedby)
 
+
+            ai = ['robotics','technology','CRM','machine learning','neural networks','data mining','internet of things','artificial intelligence',
+                  'Deep Learning','reinforcement learning','computer vision', 'Natural language processing', 'recommender system', 'Algorithm Game Theory',
+                  'Computational Design']
+            security = ['Antivirus','Anti_Virus','security','firewall','cyber security','network security','internet security','information security','computer security'
+                        'it security','network firewall', 'data security','cryptography','cyber threats','web security']
+
+            for i in ai:
+                if i in title or abstract:
+                    flag_ai = True
+
+                else:
+                    flag_ai = False
+
+            for x in security:
+                if x in title or abstract:
+                    flag_security = True
+
+                else:
+                    flag_security = False
+
+
             split_auth = author.split('and')
 
             size_auth = len(split_auth);
-
 
 
             try:
@@ -60,20 +81,23 @@ try:
             authors = str(split_auth)
             authors_new = authors.split('['']')
 
+            if flag_ai == True and flag_security == True:
+                sqlQuery = "INSERT INTO paper (title,citation,abstract) VALUES (%s,%s,%s);"
+                cursor.execute(sqlQuery, (title, citedby ,abstract))
 
-            sqlQuery = "INSERT INTO paper (title,citation,abstract) VALUES (%s,0,%s);"
+                try:
+                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,%s,%s,%s);"
 
-            cursor.execute(sqlQuery, (title, abstract))
+                    cursor.execute(sqlQuery2, (auth1, auth2, authors, size_auth))
+                except:
+                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,'None','None',%s);"
 
-            try:
-                sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5, AUTH_COUNT ) VALUES (%s,%s,%s,%s);"
+                    cursor.execute(sqlQuery2, (auth1, size_auth))
 
-                cursor.execute(sqlQuery2, (auth1, auth2, authors_new, size_auth))
+            else:
+                print('there is an error')
 
-            except:
-                sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5, AUTH_COUNT ) VALUES (%s,'0','0',%s);"
 
-                cursor.execute(sqlQuery2, (auth1, size_auth))
 
 
     connection.commit()
