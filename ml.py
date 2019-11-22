@@ -1,6 +1,8 @@
 import pymysql
 import scholarly
 import sys
+from urllib.request import Request, urlopen
+import re
 
 # login to this url: https://remotemysql.com/phpmyadmin/sql.php?db=ZejMYc2nXj&table=papers&pos=0
 # Use the username and paassword as mentioned in variable 'connection'
@@ -24,6 +26,13 @@ try:
             author = (papers.bib['author'])
             url = (papers.bib['url'])
             citedby = papers.citedby
+
+            req = Request(papers.url_scholarbib, headers={'User-Agent': 'Mozilla/5.0'})
+            webpage = urlopen(req).read()
+            new_webpage = str(webpage)
+            split_year = new_webpage.split()
+            constraint = re.sub('[^0-9]', '', new_webpage)
+            year = constraint[:4]
 
             print(title)
             print(type(abstract))
@@ -79,18 +88,18 @@ try:
 
 
             authors = str(split_auth)
-            authors_new = authors.split('['']')
+            authors_new = authors.strip("[ , ], ',', , , ")
 
             if flag_ai == True and flag_security == True:
-                sqlQuery = "INSERT INTO paper (title,citation,abstract) VALUES (%s,%s,%s);"
-                cursor.execute(sqlQuery, (title, citedby ,abstract))
+                sqlQuery = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s);"
+                cursor.execute(sqlQuery, (title, citedby ,abstract ,year, url))
 
                 try:
                     sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,%s,%s,%s);"
 
-                    cursor.execute(sqlQuery2, (auth1, auth2, authors, size_auth))
+                    cursor.execute(sqlQuery2, (auth1, auth2, authors_new, size_auth))
                 except:
-                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,'None','None',%s);"
+                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,'','',%s);"
 
                     cursor.execute(sqlQuery2, (auth1, size_auth))
 
