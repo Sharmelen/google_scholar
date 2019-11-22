@@ -1,8 +1,8 @@
 import pymysql
 import scholarly
-import sys
 from urllib.request import Request, urlopen
 import re
+import sys
 
 # login to this url: https://remotemysql.com/phpmyadmin/sql.php?db=ZejMYc2nXj&table=papers&pos=0
 # Use the username and paassword as mentioned in variable 'connection'
@@ -19,7 +19,7 @@ search_query = scholarly.search_pubs_query(word)
 try:
     with connection.cursor() as cursor:
         print('connected')
-        for x in range(2):
+        for x in range(10):
             papers = next(search_query)
             title = (papers.bib['title'])
             abstract = (papers.bib['abstract'])
@@ -91,18 +91,20 @@ try:
             authors_new = authors.strip("[ , ], ',', , , ")
 
             if flag_ai == True and flag_security == True:
-                sqlQuery = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s);"
-                cursor.execute(sqlQuery, (title, citedby ,abstract ,year, url))
 
                 try:
-                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,%s,%s,%s);"
+                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s) ;"
+                    sqlQuery4 = "INSERT INTO author (paper_id, AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (LAST_INSERT_ID(),%s,%s,%s,%s);"
 
-                    cursor.execute(sqlQuery2, (auth1, auth2, authors_new, size_auth))
+                    cursor.execute(sqlQuery2, (title,citedby,abstract,year,url))
+                    cursor.execute(sqlQuery4, (auth1,auth2,authors_new,size_auth))
+
                 except:
-                    sqlQuery2 = "INSERT INTO author (AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (%s,'','',%s);"
+                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s) ;"
+                    sqlQuery4 = "INSERT INTO author (paper_id, AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (LAST_INSERT_ID(),%s,'','',%s);"
 
-                    cursor.execute(sqlQuery2, (auth1, size_auth))
-
+                    cursor.execute(sqlQuery2, (title, citedby, abstract, year, url))
+                    cursor.execute(sqlQuery4, (auth1, size_auth))
             else:
                 print('there is an error')
 
@@ -120,8 +122,8 @@ except pymysql.err.InternalError as e:
 try:
     with connection.cursor() as cursor_new:
 
-        sqlQuery3 = 'DELETE c1, c3 FROM paper c1 INNER JOIN paper c2 INNER JOIN author c3 WHERE c1.paper_id > c2.paper_id AND c1.title = c2.title AND c1.paper_id =  c3.author_id  ;'
-
+        #sqlQuery3 = 'DELETE c1, c3 FROM paper c1 INNER JOIN paper c2 INNER JOIN author c3 WHERE c1.paper_id > c2.paper_id AND c1.title = c2.title AND c1.paper_id =  c3.author_id  ;'
+        sqlQuery3 = 'DELETE c1 FROM paper c1 INNER JOIN paper c2 WHERE c1.paper_id > c2.paper_id AND c1.title = c2.title ; '
         cursor_new.execute(sqlQuery3)
 
         connection.commit()
