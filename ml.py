@@ -93,17 +93,17 @@ try:
             if flag_ai == True and flag_security == True:
 
                 try:
-                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s) ;"
+                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url,keyword) VALUES (%s,%s,%s,%s,%s,%s) ;"
                     sqlQuery4 = "INSERT INTO author (paper_id, AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (LAST_INSERT_ID(),%s,%s,%s,%s);"
 
-                    cursor.execute(sqlQuery2, (title,citedby,abstract,year,url))
+                    cursor.execute(sqlQuery2, (title,citedby,abstract,year,url,word))
                     cursor.execute(sqlQuery4, (auth1,auth2,authors_new,size_auth))
 
                 except:
-                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url) VALUES (%s,%s,%s,%s,%s) ;"
+                    sqlQuery2 = "INSERT INTO paper (title,citation,abstract,year,url,keyword) VALUES (%s,%s,%s,%s,%s,%s) ;"
                     sqlQuery4 = "INSERT INTO author (paper_id, AUTH_1, AUTH_2, AUTH_3_5,AUTH_COUNT)  VALUES (LAST_INSERT_ID(),%s,'','',%s);"
 
-                    cursor.execute(sqlQuery2, (title, citedby, abstract, year, url))
+                    cursor.execute(sqlQuery2, (title, citedby, abstract, year, url, word))
                     cursor.execute(sqlQuery4, (auth1, size_auth))
             else:
                 print('there is an error')
@@ -130,3 +130,5 @@ try:
 
 except pymysql.err.InternalError as e:
     print('{}'.format(e))
+
+
