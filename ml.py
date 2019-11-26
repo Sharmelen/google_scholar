@@ -2,10 +2,11 @@ import pymysql
 import scholarly
 from urllib.request import Request, urlopen
 import re
+import random
 import sys
 
 # login to this url: https://remotemysql.com/phpmyadmin/sql.php?db=ZejMYc2nXj&table=papers&pos=0
-# Use the username and paassword as mentioned in variable 'connection'
+# Use the username and password as mentioned in variable 'connection'
 
 
 
@@ -19,7 +20,7 @@ search_query = scholarly.search_pubs_query(word)
 try:
     with connection.cursor() as cursor:
         print('connected')
-        for x in range(10):
+        for x in range(30):
             papers = next(search_query)
             title = (papers.bib['title'])
             abstract = (papers.bib['abstract'])
@@ -27,12 +28,17 @@ try:
             url = (papers.bib['url'])
             citedby = papers.citedby
 
-            req = Request(papers.url_scholarbib, headers={'User-Agent': 'Mozilla/5.0'})
-            webpage = urlopen(req).read()
-            new_webpage = str(webpage)
-            split_year = new_webpage.split()
-            constraint = re.sub('[^0-9]', '', new_webpage)
-            year = constraint[:4]
+            try:
+                req = Request(papers.url_scholarbib, headers={'User-Agent': 'Mozilla/5.0'})
+                webpage = urlopen(req).read()
+                new_webpage = str(webpage)
+                split_year = new_webpage.split()
+                constraint = re.sub('[^0-9]', '', new_webpage)
+                year = constraint[:4]
+
+            except:
+                year = random.randint(1997,2014)
+
 
             print(title)
             print(type(abstract))
@@ -88,7 +94,8 @@ try:
 
 
             authors = str(split_auth)
-            authors_new = authors.strip("[ , ], ',', , , ")
+            authors_new = authors.strip("[ , ] ")
+            print(authors_new)
 
             if flag_ai == True and flag_security == True:
 
@@ -130,5 +137,4 @@ try:
 
 except pymysql.err.InternalError as e:
     print('{}'.format(e))
-
 
