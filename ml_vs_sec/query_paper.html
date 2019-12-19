@@ -1,0 +1,39 @@
+<html>
+<form action="query_paper.php" method = "POST">
+Paper Query
+
+<p>Select range of year in which paper is published</p>
+	<input type="radio" name="year_range" value="0" checked>None<br>
+	<input type="radio" name="year_range" value="1"> 1991 - 1995<br>
+	<input type="radio" name="year_range" value="2"> 1995 - 1999<br>
+	<input type="radio" name="year_range" value="3"> 1999 - 2003<br>
+	<input type="radio" name="year_range" value="4"> 2003 - 2007<br>
+	<input type="radio" name="year_range" value="5"> 2007 - 2011<br>
+	<input type="radio" name="year_range" value="6"> 2011 - 2015<br>
+	<input type="radio" name="year_range" value="7"> 2015 - 2019<br>
+
+
+	
+Select paper based on a specific year<br>
+
+<input type="text" name="specific_year" value = "0"><br>
+
+<p>Select paper based on a range of citation</p> 
+	<input type="radio" name="cite_range" value="0" checked>None<br>
+	<input type="radio" name="cite_range" value="1"> 0 - 99<br>
+	<input type="radio" name="cite_range" value="2"> 100 - 499<br>
+	<input type="radio" name="cite_range" value="3"> 500 - 999<br>
+	<input type="radio" name="cite_range" value="4"> 1000 - 1499<br>
+	<input type="radio" name="cite_range" value="5"> 1500 and above<br>
+
+Select paper based on specific author name(note that the author must be a main author or co author of this paper)
+
+<input type="text" name="author" value = "John Doe"><br>
+
+<input type = 'submit' value = 'submit'>
+
+</form>
+
+
+
+</html>
