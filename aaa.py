@@ -9,12 +9,12 @@ import hashlib
 # Use the username and password as mentioned in variable 'connection'
 connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
 
-ai = ['"machine learning"','"neural networks"','"data mining"','"internet of things"',
-      '"Deep Learning"','"reinforcement learning"','"computer vision"', '"Natural language processing"',
+ai = ['"neural networks"','"data mining"','"internet of things"','CNN','RNN','SVM',
+      '"reinforcement learning"','"computer vision"', '"Natural language processing"',
       '"recommender system"', '"Algorithm Game Theory"',
                   'Computational Design']
-security = ['Antivirus','firewall','cyber','network','internet','information','computer',
-            'it','"network firewall"', 'data','cryptography','"cyber threats"','web']
+security = ['Antivirus','firewall','"cyber Security"','"network Security"','"internet Security"','"information Security"',
+            '"computer Security"','"network firewall"','cryptography','"cyber threats"','"web Security"']
 
 comb = [[i,j] for i in ai
               for j in security]
@@ -25,8 +25,8 @@ for m in range (len(comb)):
     d.append(comb[m])
 print(len(d))
 const = ' "Deep Learning" OR AI OR ML OR "Machine Learning"'
-count1 = 0
-word = d[count1][1] + " AND " + d[count1][0] + const
+count1 = 2
+word = d[count1][1] + " " + d[count1][0] + const
 print(word)
 search_query = scholarly.search_pubs_query(word)
 
@@ -42,9 +42,18 @@ with connection.cursor() as cursor:
         print(y)
 
         title = (data[y].bib['title'])
-        abstract = (data[y].bib['abstract'])
-        author = (data[y].bib['author'])
-        url = (data[y].bib['url'])
+        try:
+            abstract = (data[y].bib['abstract'])
+        except:
+            abstract = 0
+        try:
+            author = (data[y].bib['author'])
+        except:
+            author = ""
+        try:
+            url = (data[y].bib['url'])
+        except:
+            url = ""
         hash_abs = hashlib.md5(str(abstract+title).encode())
         hash_paper = hash_abs.hexdigest()
 
