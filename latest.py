@@ -53,13 +53,24 @@ with connection.cursor() as cursor:
 
         try:
             title = (data[y].bib['title'])
+        except:
+            title = "None"
+        try:
             abstract = (data[y].bib['abstract'])
+        except:
+            abstract = "None"
+        try:
             author = (data[y].bib['author'])
+        except:
+            author = "None"
+        try:
             url = (data[y].bib['url'])
+        except:
+            url = "None"
+        try:
             citedby = data[y].citedby
         except:
-            print("Paper data incomplete")
-            continue
+            citedby = 0
 
         print("citations", citedby)
 
