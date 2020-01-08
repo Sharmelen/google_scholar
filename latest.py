@@ -70,7 +70,7 @@ with connection.cursor() as cursor:
 
         print("url",url)
 
-        hash_abs = hashlib.md5(str(str(title)+str(size_auth)).encode())
+        hash_abs = hashlib.md5(str(str(title)+str(size_auth)+str(d[count1][2])).encode())
         hash_paper = hash_abs.hexdigest()
 
         # get year
