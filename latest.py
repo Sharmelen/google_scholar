@@ -14,7 +14,7 @@ ai = ['"neural network"','CNN','RNN','SVM',
 security = ['Antivirus','firewall','"cyber Security"','cybersecurity','"network Security"','"internet Security"',
             '"computer Security"','"web Security"','"intrusion detection"','"anomaly detection"','"iot security"']
 
-publication = ['RAID','ACM','CSS','IEEE ','ACSAC','NDSS','DSN','USENIX','KDD','ESORICS','IEEE','DIMWA']
+publication = ['RAID','"ACM CCS"','"IEEE S&P" ','ACSAC','NDSS','DSN','USENIX','KDD','ESORICS','"INTERNATIONAL WORLD WIDE WEB CONF"','DIMVA']
 
 comb = [[i,j,k] for i in ai
                 for j in security
