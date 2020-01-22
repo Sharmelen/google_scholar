@@ -9,12 +9,15 @@ import hashlib
 # Use the username and password as mentioned in variable 'connection'
 connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
 
-ai = ['"neural network"','CNN','RNN','SVM',
-      '"reinforcement learning"']
+ai = ['"neural network"','RNN','SVM','"convolution network"','""decision tree"','"support vector machine"',
+      '"reinforcement learning"','"supervised learning"','"unsupervised learning"','"genetic algorithm"',
+      'kfold','k-fold','"k fold"','"neural architecture"']
 security = ['Antivirus','firewall','"cyber Security"','cybersecurity','"network Security"','"internet Security"',
-            '"computer Security"','"web Security"','"intrusion detection"','"anomaly detection"','"iot security"']
+            '"computer Security"','"web Security"','"intrusion detection"','"anomaly detection"','"iot security"',
+            '"mobile security"','"threat identification"','malware','spyware','ransomeware','"data leak prevention"',
+            '"data leak protection"']
 
-publication = ['RAID','"ACM CCS"','"IEEE S&P" ','ACSAC','NDSS','DSN','USENIX','KDD','ESORICS','"INTERNATIONAL WORLD WIDE WEB CONF"','DIMVA']
+publication = ['ESORICS','"INTERNATIONAL WORLD WIDE WEB CONF"']
 
 comb = [[i,j,k] for i in ai
                 for j in security
@@ -25,7 +28,7 @@ for m in range (len(comb)):
     d.append(comb[m])
 print(len(d))
 
-count1 = 0
+count1 = 110
 print(d[count1])
 
 word = '{} {} source:{} "Deep Learning" OR AI OR ML OR "Machine Learning"'.format(d[count1][1],d[count1][0],d[count1][2])
