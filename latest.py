@@ -9,34 +9,43 @@ import hashlib
 # Use the username and password as mentioned in variable 'connection'
 connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
 
-ai = ['"neural network"','RNN','SVM','"convolution network"','""decision tree"','"support vector machine"',
-      '"reinforcement learning"','"supervised learning"','"unsupervised learning"','"genetic algorithm"',
-      'kfold','k-fold','"k fold"','"neural architecture"']
+ai = ['"artificial intelligence"','"deep learning"','"machine learning"','"neural network"','RNN','SVM',
+      '"convolution network"','""decision tree"','"support vector machine"','"reinforcement learning"',
+      '"supervised learning"','"unsupervised learning"','"genetic algorithm"','kfold','k-fold','"k fold"','"neural architecture"']
+
 security = ['Antivirus','firewall','"cyber Security"','cybersecurity','"network Security"','"internet Security"',
             '"computer Security"','"web Security"','"intrusion detection"','"anomaly detection"','"iot security"',
             '"mobile security"','"threat identification"','malware','spyware','ransomeware','"data leak prevention"',
             '"data leak protection"']
+publication = ['European Symposium on Research in Computer Security','Symposium on Research in Attacks, Intrusions and Defenses']
+pub_type = "AI"
+keyword_type = "Security"
+pub_src = []
+for n in range (len(publication)):
+    pub = publication[n]
+    src = " source:"
+    pub_src.append(src + src.join(pub.split()))
 
-publication = ['ESORICS','"INTERNATIONAL WORLD WIDE WEB CONF"']
-
-comb = [[i,j,k] for i in ai
-                for j in security
+# data
+comb_1 = [[i,k] for i in ai
                 for k in publication]
-
 d = []
-for m in range (len(comb)):
-    d.append(comb[m])
-print(len(d))
+for m in range (len(comb_1)):
+    d.append(comb_1[m])
+# search
+comb_2 = [[i,k] for i in ai
+                for k in pub_src]
+search = []
+for m in range (len(comb_2)):
+    search.append(comb_2[m])
 
-count1 = 110
-print(d[count1])
+print("total combination:"+str(len(d)))
+count1 = 4
+search_term = "{}{}".format(search[count1][0],search[count1][1])
 
-word = '{} {} source:{} "Deep Learning" OR AI OR ML OR "Machine Learning"'.format(d[count1][1],d[count1][0],d[count1][2])
-print(word)
-
-search_query = scholarly.search_pubs_query(word)
-
-
+print("combination of keyword is :" + d[count1][0],d[count1][1])#before entering the keyword into database please change the type to string
+print("the search term is:" + search_term)
+search_query = scholarly.search_pubs_query(search_term)
 data = []
 
 for x in range(100):
@@ -46,6 +55,7 @@ for x in range(100):
         print(papers.bib['title'])
 
     except:
+        # print('skipped')
         continue
 
 # try:
@@ -84,7 +94,8 @@ with connection.cursor() as cursor:
 
         print("url",url)
 
-        hash_abs = hashlib.md5(str(str(title)+str(size_auth)+str(d[count1][2])).encode())
+        hash_abs = hashlib.md5(str(str(title)+str(d[count1][1])).encode())
+        # hash_abs = hashlib.md5(str(str(title)+str(size_auth)+str(d[count1][1])).encode())
         hash_paper = hash_abs.hexdigest()
 
         # get year
@@ -98,8 +109,8 @@ with connection.cursor() as cursor:
         except:
             year = 0
 
-        q_insert_conference = "INSERT INTO conference (name) SELECT %s WHERE NOT EXISTS (SELECT name FROM conference WHERE name = %s)"
-        rows = cursor.execute(q_insert_conference, (d[count1][2], d[count1][2]))
+        q_insert_conference = "INSERT INTO conference (name,type) SELECT %s,%s WHERE NOT EXISTS (SELECT name,type FROM conference WHERE name = %s AND type = %s)"
+        rows = cursor.execute(q_insert_conference, (d[count1][1],pub_type, d[count1][1],pub_type))
         conf_id = connection.insert_id()
         # if id == 0, duplicate
         print("conf read", conf_id)
@@ -107,24 +118,25 @@ with connection.cursor() as cursor:
         # if duplicate, get id
         if conf_id == 0:
             q_duplicate_conf = "SELECT id FROM conference WHERE name = %s;"
-            cursor.execute(q_duplicate_conf, d[count1][2])
+            cursor.execute(q_duplicate_conf, d[count1][1])
             conf_id = cursor.fetchone()['id']
             print("conf duplicate id", conf_id)
 
-        q_insert_keyword = "INSERT INTO keyword (name) SELECT %s WHERE NOT EXISTS (SELECT name FROM keyword WHERE name = %s)"
-        rows = cursor.execute(q_insert_keyword, (d[count1][0], d[count1][0]))
+        q_insert_keyword = "INSERT INTO keyword (name,type) SELECT %s,%s WHERE NOT EXISTS (SELECT name,type FROM keyword WHERE name = %s AND type = %s)"
+        rows = cursor.execute(q_insert_keyword, (d[count1][0],keyword_type, d[count1][0],keyword_type))
         keyword_id_1 = connection.insert_id()
         # if id == 0, duplicate
         print("keyword 1 read", keyword_id_1)
-
-        rows = cursor.execute(q_insert_keyword, (d[count1][1], d[count1][1]))
-        keyword_id_2 = connection.insert_id()
-        # if id == 0, duplicate
-        print("keyword 2 read", keyword_id_2)
+        if keyword_id_1 == 0:
+            # Get duplicate keyword_id
+            q_duplicate_keyword = "SELECT id FROM keyword WHERE name = %s;"
+            cursor.execute(q_duplicate_keyword, d[count1][0])
+            keyword_id_1 = cursor.fetchone()['id']
+            print("keyword paper id", keyword_id_1)
 
         try:
             q_insert_paper = "INSERT IGNORE INTO papers (conference_id, title,year,search_term,citation,url,abstract,author_count,hash,date) VALUES (%s, %s,%s,%s,%s,%s,%s,%s,%s,NOW());"
-            row_insert = cursor.execute(q_insert_paper, (conf_id, title, year, word, citedby, url, abstract, size_auth, hash_paper))
+            row_insert = cursor.execute(q_insert_paper, (conf_id, title, year, search_term, citedby, url, abstract, size_auth, hash_paper))
             paper_id = connection.insert_id()
         except:
             row_insert = 0
@@ -133,35 +145,25 @@ with connection.cursor() as cursor:
         # if paper == 0, duplicate
         print("paper read", paper_id)
 
-        # If there is duplicate, insert only new keyword relationship (if new keyword)
+        # If there is duplicate, insert only new keyword relationship
         if row_insert == 0:
+            # Get duplicate keyword_id
+            q_duplicate_paper = "SELECT id FROM papers WHERE title = %s;"
+            cursor.execute(q_duplicate_keyword, title)
+            paper_id = cursor.fetchone()['id']
+            print("paper id", paper_id)
             # Insert keyword relationship
             q_insert_keyword_paper = "INSERT IGNORE INTO keyword_paper (paper_id, keyword_id) VALUES (%s, %s);"
-            if keyword_id_1 != 0:
-                cursor.execute(q_insert_keyword_paper, (paper_id, keyword_id_1))
-                print("inserting relationship p-k 1")
-            if keyword_id_2 != 0:
-                cursor.execute(q_insert_keyword_paper, (paper_id, keyword_id_2))
-                print("inserting relationship p-k 2")
+            cursor.execute(q_insert_keyword_paper, (paper_id, keyword_id_1))
+            print("inserting relationship p-k 1")
 
         # Else if new paper = insert authors and all relationship
         elif row_insert != 0:
             print("paper new id", paper_id)
 
-            # Get duplicate keyword_id
-            q_duplicate_keyword = "SELECT id FROM keyword WHERE name = %s;"
-            cursor.execute(q_duplicate_keyword, d[count1][0])
-            keyword_id_1 = cursor.fetchone()['id']
-            print("keyword paper id", keyword_id_1)
-            cursor.execute(q_duplicate_keyword, d[count1][1])
-            keyword_id_2 = cursor.fetchone()['id']
-            print("keyword paper id", keyword_id_2)
-
             # Insert keyword relationship
             q_insert_keyword_paper = "INSERT IGNORE INTO keyword_paper (paper_id, keyword_id) VALUES (%s, %s);"
             cursor.execute(q_insert_keyword_paper, (paper_id, keyword_id_1))
-            print("inserting relationship p-k")
-            cursor.execute(q_insert_keyword_paper, (paper_id, keyword_id_2))
             print("inserting relationship p-k")
 
             # Insert authors table and junction table
