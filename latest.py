@@ -40,7 +40,7 @@ for m in range (len(comb_2)):
     search.append(comb_2[m])
 
 print("total combination:"+str(len(d)))
-count1 = 4
+count1 = 0
 search_term = "{}{}".format(search[count1][0],search[count1][1])
 
 print("combination of keyword is :" + d[count1][0],d[count1][1])#before entering the keyword into database please change the type to string
