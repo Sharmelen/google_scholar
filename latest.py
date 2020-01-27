@@ -11,7 +11,7 @@ connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, 
 
 ai = ['"artificial intelligence"','"deep learning"','"machine learning"','"neural network"','"recurrent neural networks"',
       '"support vector machine"','"convolutional neural network"','""decision tree"','"reinforcement learning"',
-      '"supervised learning"','"unsupervised learning"','"genetic algorithm"','kfold','k-fold','"k fold"','"neural architecture"']
+      '"supervised learning"','"unsupervised learning"','"genetic algorithm"','"k fold"','"neural architecture"']
 
 security = ['Antivirus','firewall','"cyber Security"','cybersecurity','"network Security"','"internet Security"',
             '"computer Security"','"web Security"','"intrusion detection"','"anomaly detection"','"iot security"',
