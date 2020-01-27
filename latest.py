@@ -149,7 +149,7 @@ with connection.cursor() as cursor:
         if row_insert == 0:
             # Get duplicate keyword_id
             q_duplicate_paper = "SELECT id FROM papers WHERE title = %s;"
-            cursor.execute(q_duplicate_keyword, title)
+            cursor.execute(q_duplicate_paper, title)
             paper_id = cursor.fetchone()['id']
             print("paper id", paper_id)
             # Insert keyword relationship
