@@ -18,8 +18,8 @@ security = ['Antivirus','firewall','"cyber Security"','cybersecurity','"network 
             '"mobile security"','"threat identification"','malware','spyware','ransomeware','"data leak prevention"',
             '"data leak protection"']
 publication = ['European Symposium on Research in Computer Security','Symposium on Research in Attacks, Intrusions and Defenses']
-pub_type = "AI"
-keyword_type = "Security"
+pub_type = "Security"
+keyword_type = "AI"
 pub_src = []
 for n in range (len(publication)):
     pub = publication[n]
