@@ -9,7 +9,7 @@ import hashlib
 # Use the username and password as mentioned in variable 'connection'
 connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
 
-ai = ['"artificial intelligence"','"deep learning"','"machine learning"','"neural network"','RNN','SVM',
+ai = ['"artificial intelligence"','"deep learning"','"machine learning"','"neural network"','"recurrent neural networks"','"support vector machine"',
       '"convolution network"','""decision tree"','"support vector machine"','"reinforcement learning"',
       '"supervised learning"','"unsupervised learning"','"genetic algorithm"','kfold','k-fold','"k fold"','"neural architecture"']
 
