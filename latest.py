@@ -7,7 +7,7 @@ import hashlib
 
 # login to this url: https://remotemysql.com/phpmyadmin/sql.php?db=ZejMYc2nXj&table=papers&pos=0
 # Use the username and password as mentioned in variable 'connection'
-connection = pymysql.connect(host='37.59.55.185', user='ZejMYc2nXj', port=3306, password='TtEI93o66O', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host='37.59.55.185', user='', port=3306, password='', db='ZejMYc2nXj', cursorclass=pymysql.cursors.DictCursor)
 # AI keywords
 kw = ['"artificial intelligence"','"deep learning"','"machine learning"','"neural network"','"recurrent neural networks"','"support vector machine"',
       '"convolutional neural network"','"decision tree"','"reinforcement learning"',
